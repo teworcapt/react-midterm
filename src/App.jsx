@@ -1,41 +1,62 @@
 
 import { useState } from "react";
+import { add, subtract } from "./calculator";
 
 function App() {
-  const [a, setA] = useState("");
-  const [b, setB] = useState("");
+  const [first, setFirst] = useState("0");
+  const [second, setSecond] = useState("0");
   const [result, setResult] = useState(null);
 
-  function handleAdd() {
-    setResult(Number(a) + Number(b));
+  function calculate(operation) {
+    const a = Number(first);
+    const b = Number(second);
+
+    if (first.trim() === "" || second.trim() === "" ||
+        !Number.isFinite(a) || !Number.isFinite(b)) {
+      setResult("Please enter valid numbers.");
+      return;
+    }
+
+    setResult(
+      operation === "add" ? add(a, b) : subtract(a, b)
+    );
   }
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>React CI/CD Midterm Assessment</h1>
-      <h2>Calculator</h2>
+    <main style={{
+      maxWidth: "420px",
+      margin: "60px auto",
+      padding: "24px",
+      fontFamily: "Arial, sans-serif",
+      textAlign: "center"
+    }}>
+      <h1>React Calculator</h1>
+      <p>Version 2.0</p>
 
+      <label htmlFor="first">First number</label>
       <input
+        id="first"
         type="number"
-        value={a}
-        onChange={(e) => setA(e.target.value)}
-        placeholder="First number"
+        value={first}
+        onChange={(e) => setFirst(e.target.value)}
+        style={{ display: "block", width: "100%", padding: "10px", margin: "8px 0 16px" }}
       />
 
+      <label htmlFor="second">Second number</label>
       <input
+        id="second"
         type="number"
-        value={b}
-        onChange={(e) => setB(e.target.value)}
-        placeholder="Second number"
+        value={second}
+        onChange={(e) => setSecond(e.target.value)}
+        style={{ display: "block", width: "100%", padding: "10px", margin: "8px 0 16px" }}
       />
 
-      <button onClick={handleAdd}>Add</button>
+      <button onClick={() => calculate("add")}>Add (+)</button>
+      {" "}
+      <button onClick={() => calculate("subtract")}>Subtract (−)</button>
 
-      {result !== null && <h3>Result: {result}</h3>}
-
-      <p>Version 1.0</p>
-      <p>Created by: MA TESA NICOLE V NIETO </p>
-    </div>
+      <h2>Result: {result === null ? "—" : result}</h2>
+    </main>
   );
 }
 
